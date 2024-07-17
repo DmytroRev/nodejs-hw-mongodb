@@ -43,6 +43,7 @@ export const setupServer = () => {
                 return;
             }
             res.status(200).json({
+                status: 200,
                 massage: `Successfully found contact with id ${contactId}`,
                 data: contact,
             });
