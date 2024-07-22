@@ -1,44 +1,34 @@
-import mongoose, { Schema } from "mongoose";
+import { Contact } from "../db/models/Contacts.js";
 
-const contactsShema = new Schema({
-    name: {
-        type: String,
-        required: true,
+
+export const getAllContacts = () => Contact.find();
+
+export const getContactById = (contactId) => Contact.findById(contactId);
+
+export const createContact = (contactData) => Contact.create(contactData);
+
+export const updateContact = async (contactId, payload, options) => {
+    const rawResult = await Contact.findOneAndUpdate({
+        _id: contactId
     },
- phoneNumber: {
-            type: String,
-            require: true
-    },
- email: {
+        payload, {
+            new: true,
+            includeResultMetadata: true,
+            ...options
+    });
 
-         type: String,
-         require: false,
+    if (!rawResult || !rawResult.value) return null;
 
-    },
-    isFavourite: {
-        type: Boolean,
-        default: false,
-    },
-    contactType: {
-        type: String,
-        enum: ['work', 'home', 'personal'],
-        require: true,
-        default: 'personal',
-    }
-},
-    {
-        timestamps: true
-
-});
-
-export const Contact = mongoose.model('Contact', contactsShema);
-
-export const getAllContacts = async () => {
-    const contacts = await Contact.find();
-    return contacts;
+    return {
+        contact: rawResult.value,
+        isNew: Boolean(rawResult?.lastErrorObject?.upserted)
+    };
 };
 
-export const getContactById = async (contactId) => {
-    const contact = await Contact.findById(contactId);
+
+export const deleteContact = async (contactId) => {
+    const contact = await Contact.findOneAndDelete({
+        _id: contactId
+    });
     return contact;
 };
