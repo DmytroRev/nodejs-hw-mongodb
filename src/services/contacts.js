@@ -16,8 +16,14 @@ export const getAllContacts = async ({ page, perPage, sortBy, sortOrder, filter}
     }
 
     const [contacts, count] = await Promise.all([
-        contactQuery.sort({[sortBy]: sortOrder}).skip(skip).limit(limit).exec(),
-        Contact.find().merge(contactQuery).countDocuments()
+        contactQuery
+            .sort({ [sortBy]: sortOrder })
+            .skip(skip)
+            .limit(limit)
+            .exec(),
+        Contact.find()
+            .merge(contactQuery)
+            .countDocuments()
     ]);
     const totalPages = Math.ceil(count / perPage);
     return {
