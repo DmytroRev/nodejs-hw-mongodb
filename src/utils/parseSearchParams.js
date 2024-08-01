@@ -2,10 +2,11 @@ import { SORT_ORDER } from "../constants/index.js";
 
 const parseSortBy = (sortBy) => {
     const keys = [
+        '_id',
         'name'
     ];
     if (keys.includes(sortBy)) return sortBy;
-    return 'name';
+    return '_id';
 };
 
 const parseSortOrder = (sortOrder) => {
