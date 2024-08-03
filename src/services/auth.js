@@ -37,3 +37,28 @@ export const loginUser = async (userLog) => {
     refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
   });
 };
+
+export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
+  const session = await UsersCollection.findOne({
+    _id: sessionId,
+    refreshToken,
+  });
+
+  if (session === null) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  if (new Date() > new Date(session.refreshTokenValidUntil)) {
+    throw createHttpError(401, 'Session token expired');
+  }
+
+  await SessionCollection.deleteOne({ _id: session._id });
+
+  return SessionCollection.create({
+    userId: session.userId,
+    accessToken: crypto.randomBytes(30).toString('base64'),
+    refreshToken: crypto.randomBytes(30).toString('base64'),
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+  });
+};
