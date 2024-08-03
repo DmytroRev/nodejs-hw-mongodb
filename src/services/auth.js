@@ -38,6 +38,10 @@ export const loginUser = async (userLog) => {
   });
 };
 
+export const logoutUser = async (sessionId) => {
+  await UsersCollection.deleteOne({ _id: sessionId });
+};
+
 export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   const session = await UsersCollection.findOne({
     _id: sessionId,
