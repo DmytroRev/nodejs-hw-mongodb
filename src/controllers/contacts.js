@@ -14,12 +14,14 @@ export const getAllContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
+
   const contacts = await getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
-    filter
+    filter,
+    userId: req.user._id,
   });
 
   res.send({
@@ -33,7 +35,6 @@ export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
 
-
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
   }
@@ -46,12 +47,20 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
+  const contact = {
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    email: req.body.email,
+    contactType: req.body.contactType,
+    userId: req.user._id,
+  };
+
+  const createdContact = await createContact(contact); // используйте другую переменную для результата
 
   res.status(201).json({
     status: 201,
-    message: 'Successfully create contact',
-    data: contact,
+    message: 'Successfully created contact',
+    data: createdContact,
   });
 };
 

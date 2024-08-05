@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const contactsSchema = new Schema(
   {
@@ -23,6 +23,10 @@ const contactsSchema = new Schema(
       enum: ['work', 'home', 'personal'],
       required: true,
       default: 'home',
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
     },
   },
   {
