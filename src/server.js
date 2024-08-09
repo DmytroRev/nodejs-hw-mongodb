@@ -5,6 +5,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import contactsRouter from './routers/contacts.js';
 import authRouter from './routers/auth.js';
+import cookieParser from 'cookie-parser';
 
 const PORT = process.env.PORT || 3000;
 
@@ -17,7 +18,7 @@ export const setupServer = () => {
       limit: '100kb',
     }),
   );
-
+  app.use(cookieParser());
   app.use(
     pino({
       transport: {

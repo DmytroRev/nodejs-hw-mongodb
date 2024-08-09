@@ -31,14 +31,21 @@ export const getAllContactsController = async (req, res) => {
   });
 };
 
-export const getContactByIdController = async (req, res) => {
+export const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, req.user._id);
 
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
   }
 
+  // const contact = await getContactById(contactId);
+  // if (
+  //   contact === null ||
+  //   contact.userId.toString() !== req.contact._id.toString()
+  // ) {
+  //   return next(createHttpError(404, 'Contact not found'));
+  // }
   res.status(200).json({
     status: 200,
     message: `Successfully found contact with id ${contactId}!`,
@@ -47,20 +54,19 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = {
+  const contactFields = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
+    isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
     userId: req.user._id,
   };
-
-  const createdContact = await createContact(contact); // используйте другую переменную для результата
-
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully created contact',
-    data: createdContact,
+  const contact = await createContact(contactFields);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully created a contact!',
+    data: contact,
   });
 };
 

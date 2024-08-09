@@ -43,7 +43,7 @@ export const logoutUser = async (sessionId) => {
 };
 
 export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
-  const session = await UsersCollection.findOne({
+  const session = await SessionCollection.findOne({
     _id: sessionId,
     refreshToken,
   });
