@@ -46,10 +46,11 @@ export const getContactById = (contactId, userId) =>
 
 export const createContact = (contactData) => Contact.create(contactData);
 
-export const updateContact = async (contactId, payload, options) => {
+export const updateContact = async (contactId, userId, payload, options) => {
   const rawResult = await Contact.findOneAndUpdate(
     {
       _id: contactId,
+      userId,
     },
     payload,
     {
@@ -67,9 +68,10 @@ export const updateContact = async (contactId, payload, options) => {
   };
 };
 
-export const deleteContact = async (contactId) => {
+export const deleteContact = async (contactId, userId) => {
   const contact = await Contact.findOneAndDelete({
     _id: contactId,
+    userId,
   });
   return contact;
 };
