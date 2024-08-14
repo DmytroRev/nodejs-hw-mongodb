@@ -1,3 +1,5 @@
+import { env } from '../utils/env.js';
+
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
@@ -11,9 +13,9 @@ export const ROLES = {
 };
 
 export const SMTP = {
-  SMTP_HOST: process.env.SMTP_HOST,
-  SMPT_PORT: process.env.SMTP_PORT,
-  SMTP_USER: process.env.SMTP_USER,
-  SMTP_PWD: process.env.SMTP_PWD,
-  SMTP_FROM_EMAIL: process.env.SMTP_FROM_EMAIL,
+  SMTP_HOST: env('SMTP_HOST'),
+  SMTP_PORT: Number(env('SMTP_PORT')),
+  SMTP_USER: env('SMTP_USER'),
+  SMTP_PASSWORD: env('SMTP_PASSWORD'),
+  SMTP_FROM: env('SMTP_FROM'),
 };

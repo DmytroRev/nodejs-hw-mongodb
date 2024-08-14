@@ -74,7 +74,7 @@ export const requestResetEmail = async (email) => {
     throw createHttpError(404, 'User not found');
   }
   sendMail({
-    from: SMTP.SMTP_FROM_EMAIL,
+    from: SMTP.SMTP_FROM,
     to: email,
     subject: 'Reset your password',
     html: `To reset password click <a href="https://www.google.com">here</a> `,
