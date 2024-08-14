@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { SessionCollection } from '../db/models/session.js';
 import crypto from 'node:crypto';
 import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import { sendMail } from '../utils/sendMail.js';
 
 export const registerUser = async (userReg) => {
   const user = await UsersCollection.findOne({ email: userReg.email });
@@ -64,5 +65,18 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     refreshToken: crypto.randomBytes(30).toString('base64'),
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
     refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+  });
+};
+
+export const requestResetEmail = async (email) => {
+  const user = await UsersCollection.findOne({ email });
+  if (user === null) {
+    throw createHttpError(404, 'User not found');
+  }
+  sendMail({
+    from: 'thefaust31@gmail.com',
+    to: email,
+    subject: 'Reset your password',
+    html: `To reset password click <a href="https://www.google.com">here</a> `,
   });
 };
