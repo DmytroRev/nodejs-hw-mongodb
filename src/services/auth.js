@@ -3,7 +3,7 @@ import { UsersCollection } from '../db/models/user.js';
 import bcrypt from 'bcrypt';
 import { SessionCollection } from '../db/models/session.js';
 import crypto from 'node:crypto';
-import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import { FIFTEEN_MINUTES, ONE_DAY, SMTP } from '../constants/index.js';
 import { sendMail } from '../utils/sendMail.js';
 
 export const registerUser = async (userReg) => {
@@ -74,7 +74,7 @@ export const requestResetEmail = async (email) => {
     throw createHttpError(404, 'User not found');
   }
   sendMail({
-    from: 'thefaust31@gmail.com',
+    from: SMTP.SMTP_FROM_EMAIL,
     to: email,
     subject: 'Reset your password',
     html: `To reset password click <a href="https://www.google.com">here</a> `,

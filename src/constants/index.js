@@ -12,4 +12,8 @@ export const ROLES = {
 
 export const SMTP = {
   SMTP_HOST: process.env.SMTP_HOST,
+  SMPT_PORT: process.env.SMTP_PORT,
+  SMTP_USER: process.env.SMTP_USER,
+  SMTP_PWD: process.env.SMTP_PWD,
+  SMTP_FROM_EMAIL: process.env.SMTP_FROM_EMAIL,
 };
