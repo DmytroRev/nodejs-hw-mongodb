@@ -75,3 +75,7 @@ export const deleteContact = async (contactId, userId) => {
   });
   return contact;
 };
+
+export const changeContactsPhoto = (contactId, photoUrl) => {
+  return Contact.findByIdAndUpdate(contactId, { photo: photoUrl });
+};
