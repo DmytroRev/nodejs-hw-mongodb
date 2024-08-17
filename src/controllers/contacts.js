@@ -1,8 +1,5 @@
 import createHttpError from 'http-errors';
-// import * as fs from 'node:fs/promises';
-// import path from 'node:path';
 import {
-  // changeContactsPhoto,
   createContact,
   deleteContact,
   getAllContacts,
@@ -66,13 +63,18 @@ export const createContactController = async (req, res) => {
 
   if (photo) {
     if (env('ENABLE_CLOUDINARY') === 'true') {
-      photoUrl = await uploadToCloudinary(photo);
+      photoUrl = await uploadToCloudinary(photo.path);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
     }
   }
+
+  if (photoUrl) {
+    contactFields.photoUrl = photoUrl;
+  }
   contactFields.photo = photoUrl;
   const contact = await createContact(contactFields);
+
   res.status(200).json({
     status: 200,
     message: 'Successfully created a contact!',
@@ -130,20 +132,3 @@ export const deleteContactController = async (req, res, next) => {
   }
   res.status(204).send();
 };
-
-// export const changeContactAvatarController = async (req, res, next) => {
-//   await fs.rename(
-//     req.file.path,
-//     path.resolve('src', 'uploads', 'photos', req.file.filename),
-//   );
-//   await changeContactsPhoto(req.user._id, req.file.filename);
-//   res.send({
-//     status: 200,
-//     message: 'Photo changed successfully!',
-//   });
-// };
-// export const patchContactController = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const photo = req.file;
-//   console.log(photo);
-// };
